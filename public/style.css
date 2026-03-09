@@ -1,0 +1,376 @@
+:root {
+    --primary-color: #dda7a5; /* Soft dusty rose */
+    --secondary-color: #d4af37; /* Soft gold */
+    --bg-color: #fcf9f8; /* Off-white / light blush */
+    --text-main: #4a4a4a;
+    --text-light: #7a7a7a;
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-main);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3, .pre-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+/* Typography & Layout */
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background-color: var(--secondary-color);
+    margin: 0 15px;
+}
+
+.divider span {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-block;
+    padding: 15px 35px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+}
+
+.btn-primary:hover {
+    background-color: #c99391;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(221, 167, 165, 0.4);
+}
+
+.btn-outline {
+    display: inline-block;
+    padding: 12px 25px;
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-outline:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background-attachment: fixed;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pre-title {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.couple-names {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.wedding-date {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+}
+
+/* Couple Section */
+.couple-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.person {
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+}
+
+.person-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background-size: cover;
+    background-position: center;
+    border: 5px solid white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.person h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.person p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.ampersand {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    color: var(--secondary-color);
+}
+
+/* Event Section */
+.event {
+    background-color: white;
+}
+
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.event-card {
+    text-align: center;
+    padding: 40px;
+    border: 1px solid #f0e6e6;
+    border-radius: 10px;
+    background: #fffafa;
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.event-card .icon {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.event-card h3 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.event-card .date, .event-card .time {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.event-card .location {
+    color: var(--text-light);
+    margin-top: 15px;
+}
+
+.map-container {
+    text-align: center;
+}
+
+.map-container h3 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.map-container iframe {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Gallery Section */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.gallery-item {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+}
+
+/* RSVP Section */
+.rsvp {
+    background-image: url('https://images.unsplash.com/photo-1510076857177-7470076d4098?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    padding: 100px 0;
+}
+
+.rsvp::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.rsvp-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.rsvp-form button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form-message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.success { color: #2e7d32; }
+.error { color: #c62828; }
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .couple-names { font-size: 3.5rem; }
+    .hero-content { padding: 15px; }
+    .ampersand { margin: 20px 0; }
+    .rsvp-content { padding: 30px 20px; }
+}

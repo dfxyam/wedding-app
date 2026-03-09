@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Daftar Tamu RSVP</title>
+    <!-- Gunakan font yang sama dengan wedding jika mungkin, atau default -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #d4af37;
+            --text-color: #333;
+            --bg-color: #fcf9f2;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .summary {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+        }
+        .summary-item {
+            text-align: center;
+        }
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .summary-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: 500;
+            color: #555;
+        }
+        tr:hover {
+            background-color: #fafafa;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-style: italic;
+            color: #888;
+        }
+        .date {
+            font-size: 0.85rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Daftar Kehadiran Tamu (RSVP)</h1>
+    
+    <div class="summary">
+        <div class="summary-item">
+            <div class="summary-value" id="totalReservations">0</div>
+            <div class="summary-label">Total Reservasi</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value" id="totalGuests">0</div>
+            <div class="summary-label">Total Tamu Hadir</div>
+        </div>
+    </div>
+
+    <table id="rsvpTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Tamu</th>
+                <th>Jumlah Kehadiran</th>
+                <th>Waktu RSVP</th>
+            </tr>
+        </thead>
+        <tbody id="rsvpBody">
+            <tr>
+                <td colspan="4" class="loading">Memuat data...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function loadData() {
+        try {
+            const response = await fetch('/api/rsvps');
+            if (!response.ok) throw new Error('Gagal mengambil data');
+            
+            const data = await response.json();
+            
+            let totalGuests = 0;
+            const tbody = document.getElementById('rsvpBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">Belum ada data RSVP</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            
+            data.forEach((rsvp, index) => {
+                totalGuests += parseInt(rsvp.attendance_count) || 0;
+                
+                const date = new Date(rsvp.created_at);
+                const formattedDate = date.toLocaleString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${escapeHtml(rsvp.name)}</strong></td>
+                    <td>${rsvp.attendance_count} Orang</td>
+                    <td class="date">${formattedDate}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            document.getElementById('totalReservations').innerText = data.length;
+            document.getElementById('totalGuests').innerText = totalGuests;
+            
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('rsvpBody').innerHTML = 
+                '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data. Silakan refresh halaman.</td></tr>';
+        }
+    }
+
+    // Hindari XSS jika tamu memasukkan script di input nama
+    function escapeHtml(unsafe) {
+        return (unsafe || '').toString()
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+    }
+
+    // Muat data saat halaman dibuka
+    document.addEventListener('DOMContentLoaded', loadData);
+</script>
+
+</body>
+</html>

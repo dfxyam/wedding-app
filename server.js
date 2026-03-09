@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs"); // Tambahkan ini
 const db = require("./db");
 
 const app = express();
@@ -13,22 +14,49 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ FIX: Handle static files untuk Vercel (serverless)
-// __dirname tidak reliable di serverless, jadi kita gunakan proses.cwd()
-const staticPath = process.env.VERCEL
-  ? path.join(process.cwd(), "public")
-  : path.join(__dirname, "public");
+// ✅ FIX: Fungsi deteksi path 'public' yang bekerja di Lokal & Vercel
+const getStaticPath = () => {
+  // Daftar kemungkinan lokasi folder public
+  const possiblePaths = [
+    path.join(__dirname, "public"), // Lokal: /project/server.js -> /project/public
+    path.join(process.cwd(), "public"), // Vercel: cwd biasanya di /var/task
+    path.join(__dirname, "..", "public"), // Vercel (api/): /var/task/api -> /var/task/public
+    path.join(process.cwd(), "..", "public"), // Fallback lain
+  ];
 
+  // Cek satu per satu, return yang pertama ada
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      console.log(`[Static Files] Serving from: ${p}`); // Log untuk debugging
+      return p;
+    }
+  }
+  // Fallback terakhir
+  return path.join(__dirname, "public");
+};
+
+const staticPath = getStaticPath();
 app.use(express.static(staticPath));
 
-// ✅ FIX: Pastikan route admin.html bisa diakses
+// ✅ Route: Admin
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(staticPath, "admin.html"));
+  const adminFile = path.join(staticPath, "admin.html");
+  if (fs.existsSync(adminFile)) {
+    res.sendFile(adminFile);
+  } else {
+    console.error(`[Error] admin.html not found at: ${adminFile}`);
+    res.status(404).send("Admin page not found");
+  }
 });
 
-// Root route
+// ✅ Route: Root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
+  const indexFile = path.join(staticPath, "index.html");
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.json({ message: "API is running. Frontend not found." });
+  }
 });
 
 // API endpoint: Submit RSVP
@@ -69,12 +97,6 @@ app.get("/api/rsvps", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// ✅ HAPUS/KOMENTARI app.listen() - Vercel tidak butuh ini!
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
 
 // ✅ EXPORT app untuk Vercel serverless
 module.exports = app;

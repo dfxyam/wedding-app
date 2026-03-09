@@ -2,9 +2,11 @@
   "name": "test",
   "version": "1.0.0",
   "description": "",
-  "main": "db.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "echo 'Building for Vercel...'",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
